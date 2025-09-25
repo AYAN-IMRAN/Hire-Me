@@ -37,7 +37,7 @@ function Home() {
           </div>
         </div>
 
-        {/* Right Side Image */}
+
         {/* Right Side Image */}
         <div className="relative hidden md:block">
           <img
