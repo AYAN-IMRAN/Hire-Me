@@ -29,7 +29,7 @@ function Home() {
               Browse Jobs
             </a>
             <a
-              href="/auth"
+              href="/login"
               className="px-6 py-3 rounded-lg border border-indigo-400 text-indigo-400 hover:bg-indigo-500 hover:text-white transition"
             >
               Get Started

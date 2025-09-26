@@ -1,8 +1,57 @@
 import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuth();
+
+  // CTA button
+  const renderCTA = () => {
+    if (!user) {
+      // Guest user
+      return (
+        <a
+          href="/login"
+          className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 
+                     text-white font-medium shadow hover:shadow-lg hover:scale-105 
+                     transition-transform"
+        >
+          Post a Job
+        </a>
+      );
+    }
+
+    if (user?.prefs?.role === "company") {
+      // Company user
+      return (
+        <a
+          href="/company-dashboard"
+          className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 
+                     text-white font-medium shadow hover:shadow-lg hover:scale-105 
+                     transition-transform"
+        >
+          Post a Job
+        </a>
+      );
+    }
+
+    if (user?.prefs?.role === "seeker") {
+      // Seeker user show profile
+      return (
+        <a
+          href="/profile"
+          className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 
+                     text-white font-medium shadow hover:shadow-lg hover:scale-105 
+                     transition-transform"
+        >
+          My Profile
+        </a>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-[#0B0F19]/70 backdrop-blur-md border-b border-white/10">
@@ -14,38 +63,21 @@ function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
-          <a
-            href="/"
-            className="text-gray-300 hover:text-indigo-400 transition-colors"
-          >
+          <a href="/" className="text-gray-300 hover:text-indigo-400 transition-colors">
             Home
           </a>
-          <a
-            href="/jobs"
-            className="text-gray-300 hover:text-indigo-400 transition-colors"
-          >
+          <a href="/jobs" className="text-gray-300 hover:text-indigo-400 transition-colors">
             Jobs
           </a>
-          <a
-            href="/companies"
-            className="text-gray-300 hover:text-indigo-400 transition-colors"
-          >
+          <a href="/companies" className="text-gray-300 hover:text-indigo-400 transition-colors">
             Companies
           </a>
-          <a
-            href="/about"
-            className="text-gray-300 hover:text-indigo-400 transition-colors"
-          >
+          <a href="/about" className="text-gray-300 hover:text-indigo-400 transition-colors">
             About
           </a>
 
-          {/* CTA Button */}
-          <a
-            href="/auth"
-            className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-medium shadow hover:shadow-lg hover:scale-105 transition-transform"
-          >
-            Post a Job
-          </a>
+          {/* Conditional CTA */}
+          {renderCTA()}
         </div>
 
         {/* Mobile Menu Button */}
@@ -72,12 +104,9 @@ function Navbar() {
           <a href="/about" className="text-gray-300 hover:text-indigo-400">
             About
           </a>
-          <a
-            href="/auth"
-            className="px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-medium shadow hover:scale-105 transition-transform text-center"
-          >
-            Post a Job
-          </a>
+
+          {/* Conditional CTA */}
+          {renderCTA()}
         </div>
       )}
     </nav>
