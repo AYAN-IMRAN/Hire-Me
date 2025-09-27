@@ -15,11 +15,8 @@ import Onboarding from "./pages/Onboarding";
 import Profile from "./pages/Profile";
 import JobsSection from "./pages/Jobs";
 import { useAuth } from "./context/AuthContext";
+import CompanyDashboard from "./pages/CompanyDashboard";
 
-// Dummy Dashboard Abhi ky lye
-const CompanyDashboard = () => (
-  <h1 className="text-2xl font-bold">🏢 Company Dashboard</h1>
-);
 
 //  Private route guard
 const PrivateRoute = ({ children }) => {
