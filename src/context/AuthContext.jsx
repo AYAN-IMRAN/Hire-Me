@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { account, ID } from "../services/appwrite";
-
+import { account } from "../services/appwrite";
+import { ID } from "appwrite";
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {

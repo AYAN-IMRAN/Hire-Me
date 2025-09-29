@@ -1,4 +1,4 @@
-import { Client, Account, ID } from "appwrite";
+import { Client, Account, ID ,TablesDB } from "appwrite";
 
 // Client setup
 export const client = new Client()
@@ -6,8 +6,8 @@ export const client = new Client()
   .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID);
   // .env.local se
 
-// Account service
+
 export const account = new Account(client);
 
-// Re-export ID utility
-export { ID };
+
+export const tableDB = new TablesDB(client)

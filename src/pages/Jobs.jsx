@@ -1,54 +1,78 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import JobCard from "../components/JobCard";
 import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 
 function JobsSection() {
   const [search, setSearch] = useState("");
+  const [job, setJob] = useState("")
   const [company, setCompany] = useState("");
 
   // Dummy job data
-  const jobs = [
-    {
-      id: 1,
-      title: "Frontend Developer",
-      company: "TechCorp",
-      description: "Build modern UI with React, Tailwind, and TypeScript.",
-      type: "Remote",
-      status: "Full Time",
-    },
-    {
-      id: 2,
-      title: "Backend Engineer",
-      company: "Cloudify",
-      description: "Work on scalable APIs and microservices with Node.js.",
-      type: "Onsite",
-      status: "Contract",
-    },
-    {
-      id: 3,
-      title: "UI/UX Designer",
-      company: "Creative Studio",
-      description: "Design sleek and modern interfaces for web & mobile apps.",
-      type: "Hybrid",
-      status: "Internship",
-    },
-    {
-      id: 4,
-      title: "Data Scientist",
-      company: "AI Labs",
-      description: "Work with big data and ML models for real-time analytics.",
-      type: "Remote",
-      status: "Full Time",
-    },
-  ];
+  // const jobs = [
+  //   {
+  //     id: 1,
+  //     title: "Frontend Developer",
+  //     company: "TechCorp",
+  //     description: "Build modern UI with React, Tailwind, and TypeScript.",
+  //     type: "Remote",
+  //     status: "Full Time",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Backend Engineer",
+  //     company: "Cloudify",
+  //     description: "Work on scalable APIs and microservices with Node.js.",
+  //     type: "Onsite",
+  //     status: "Contract",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "UI/UX Designer",
+  //     company: "Creative Studio",
+  //     description: "Design sleek and modern interfaces for web & mobile apps.",
+  //     type: "Hybrid",
+  //     status: "Internship",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Data Scientist",
+  //     company: "AI Labs",
+  //     description: "Work with big data and ML models for real-time analytics.",
+  //     type: "Remote",
+  //     status: "Full Time",
+  //   },
+  // ];
+
+
+   useEffect(() => {
+      (async () => {
+        try {
+          const res = await tableDB.listRows({
+    databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
+    tableId: import.meta.env.VITE_APPWRITE_JOBS_TABLE_NAME,
+    queries: [
+      Query.equal("jobId", user.$id) 
+    ]
+  });
+  
+  
+          if (res && res.rows.length > 0) {
+            setJob(res.rows[0]); 
+          }
+        } catch (err) {
+          console.error("Jobs fetch error:", err);
+        }
+      })();
+    }, []);
+
 
   // Filtered jobs
-  const filteredJobs = jobs.filter(
-    (job) =>
-      job.title.toLowerCase().includes(search.toLowerCase()) &&
-      job.company.toLowerCase().includes(company.toLowerCase())
-  );
+  // const filteredJobs = jobs.filter(
+  //   (job) =>
+  //     job.title.toLowerCase().includes(search.toLowerCase()) &&
+  //     job.company.toLowerCase().includes(company.toLowerCase())
+  // );
 
   return (
     <section className="min-h-screen bg-[#0B0F19] text-white px-6 py-12">
@@ -118,8 +142,8 @@ function JobsSection() {
 
         {/* Jobs Grid */}
         <motion.div layout className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredJobs.length > 0 ? (
-            filteredJobs.map((job) => <JobCard key={job.id} job={job} />)
+          {job.length > 0 ? (
+            job.map((job) => <JobCard key={job.id} job={job} />)
           ) : (
             <p className="text-gray-400 col-span-full text-center">
               No jobs found 😢

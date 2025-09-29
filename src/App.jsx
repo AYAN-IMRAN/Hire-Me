@@ -6,6 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Toaster } from "sonner";
+// import toast, { ToastBar } from "react-hot-toast";
 
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -16,9 +17,9 @@ import Profile from "./pages/Profile";
 import JobsSection from "./pages/Jobs";
 import { useAuth } from "./context/AuthContext";
 import CompanyDashboard from "./pages/CompanyDashboard";
+import CreateJob from "./pages/CreateJob";
 
-
-//  Private route guard
+// Private route guard
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
@@ -41,13 +42,13 @@ function App() {
   return (
     <Router>
       <div className="bg-[#0B0F19] min-h-screen text-white">
-        {/*  Navbar */}
+        {/* Navbar */}
         <Navbar />
 
-        {/*  Routes */}
+        {/* Routes */}
         <main className="pt-10 px-4">
           <Routes>
-            {/*  Public Routes */}
+            {/* Public Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
@@ -85,12 +86,24 @@ function App() {
               }
             />
 
-            {/* Catch-all → redirect home */}
+            
+            <Route
+              path="/create-job"
+              element={
+                <PrivateRoute>
+                  <OnboardingGuard>
+                    <CreateJob />
+                  </OnboardingGuard>
+                </PrivateRoute>
+              }
+            />
+
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
 
-        {/* Toast notifications */}
+        {/* Toast */}
+        {/* <ToastBar richColors position="top-center" /> */}
         <Toaster richColors position="top-center" />
       </div>
     </Router>
