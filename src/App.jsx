@@ -10,39 +10,13 @@ import { Toaster } from "sonner";
 
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
-import Signup from "./pages/SignUp";
-import Login from "./pages/Login";
-import Onboarding from "./pages/Onboarding";
-import Profile from "./pages/Profile";
-import JobsSection from "./pages/Jobs";
-import { useAuth } from "./context/AuthContext";
-import CompanyDashboard from "./pages/CompanyDashboard";
-import CreateJob from "./pages/CreateJob";
-
-// Private route guard
-const PrivateRoute = ({ children }) => {
-  const { user, loading } = useAuth();
-
-  if (loading) return <p className="text-gray-300">Loading...</p>;
-  if (!user) return <Navigate to="/login" replace />;
-
-  return children;
-};
-
-// Onboarding guard
-const OnboardingGuard = ({ children }) => {
-  const { user } = useAuth();
-  if (user && !user.prefs?.role) {
-    return <Navigate to="/onboarding" replace />;
-  }
-  return children;
-};
+import Auth from "./pages/Auth";
 
 function App() {
   return (
     <Router>
-      <div className="bg-[#0B0F19] min-h-screen text-white">
-        {/* Navbar */}
+      <div className="bg-[#0B0F19] min-h-screen text-white px-4">
+        {/* Navbar Fixed Top */}
         <Navbar />
 
         {/* Routes */}
@@ -101,10 +75,6 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
-
-        {/* Toast */}
-        {/* <ToastBar richColors position="top-center" /> */}
-        <Toaster richColors position="top-center" />
       </div>
     </Router>
   );
