@@ -2,8 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import Tag from "./Tag";
 import Button from "./ui/Button";
+import Tag from "./Tag";
 
 function JobCard({ job, index }) {
   const { user } = useAuth();
@@ -11,49 +11,54 @@ function JobCard({ job, index }) {
 
   const handleApply = () => {
     if (!user) {
-      //  Redirect if not logged in
+     
       navigate("/signup");
+    } else if (user.prefs?.role === "seeker") {
+     
+      navigate(`/apply-job/${job.$id}`);
     } else {
-      //  Apply job logic (API call etc.)
-      console.log("Applied to:", job.title);
+    
+      console.log("Only seekers can apply to jobs");
     }
   };
 
+ 
+  const direction = index % 2 === 0 ? -40 : 40;
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, x: direction }}
+      animate={{ opacity: 1, x: 0 }}
       transition={{
-        duration: 0.4,
-        delay: index * 0.1, 
+        duration: 0.5,
+        delay: index * 0.15,
         ease: "easeOut",
       }}
-      whileHover={{
-        scale: 1.01,
-        boxShadow: "0 8px 24px rgba(0,0,0,0.25)",
-      }}
-      className="p-6 bg-[#1A1F2E] rounded-xl border border-gray-800 
-                 shadow-md flex flex-col gap-4 cursor-pointer"
+      className="p-6 bg-[#1A1F2E] rounded-xl border border-gray-800 shadow-md flex flex-col gap-4"
     >
       {/* Job Title + Company */}
       <div>
         <h3 className="text-lg font-semibold">{job.title}</h3>
-        <p className="text-gray-400 text-sm">{job.company}</p>
+        <p className="text-gray-400 text-sm">{job.companyName}</p>
       </div>
 
       {/* Short Description */}
-      <p className="text-sm text-gray-300 line-clamp-3">{job.description}</p>
+      <p className="text-sm text-gray-300 line-clamp-3">{job.shortDesc}</p>
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2">
-        {job.tags?.map((tag, idx) => (
-          <Tag key={idx}>{tag}</Tag>
-        ))}
+      {/* Tags Section */}
+      <div className="flex flex-wrap gap-2 mt-2">
+        <Tag label={`📍 ${job.location}`} color="gray" />
+        <Tag label={`💰 ${job.salary || "Not disclosed"}`} color="violet" />
+        <Tag label={`📂 ${job.category}`} color="indigo" />
+        <Tag
+          label={job.status === "open" ? "Open" : "Closed"}
+          color={job.status === "open" ? "green" : "red"}
+        />
       </div>
 
       {/* Apply Button */}
       <div className="mt-4">
-        <Button onClick={handleApply}>Apply Now</Button>
+        <Button className="cursor-pointer" onClick={handleApply}>Apply Now</Button>
       </div>
     </motion.div>
   );

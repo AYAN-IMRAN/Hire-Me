@@ -82,7 +82,7 @@ function TrustedCompanies() {
                 className="flex items-center justify-center"
                 variants={logoVariants}
                 whileHover={{ 
-                  scale: 1.15,
+                  scale: 1.12,
                   transition: { duration: 0.3 }
                 }}
               >

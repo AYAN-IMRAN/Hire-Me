@@ -46,12 +46,10 @@ function CreateJob() {
           companyId: user.$id,
           companyName: user?.prefs?.companyName || user?.name || "",
         },
-        permissions: [
-          Permission.read(Role.any()),
-          Permission.update(Role.user(user.$id)),
-          Permission.delete(Role.user(user.$id)),
-        ],
       });
+
+
+
 
       console.log("✅ Job Created:", res);
       toast("Job posted successfully ✅");
