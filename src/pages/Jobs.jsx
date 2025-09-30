@@ -97,7 +97,7 @@ function JobsSection() {
             ))
           ) : (
             <p className="text-gray-400 col-span-full text-center">
-              No jobs found 😢
+              loading .....
             </p>
           )}
         </motion.div>
