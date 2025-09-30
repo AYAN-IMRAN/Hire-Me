@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { tableDB } from "../services/appwrite";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import Loader from "../components/ui/Loader";
+import { ID } from "appwrite";
 
 function ApplyJob() {
   const { jobId } = useParams();
@@ -13,37 +15,75 @@ function ApplyJob() {
   const [resumeLink, setResumeLink] = useState("");
   const [intro, setIntro] = useState("");
   const [loading, setLoading] = useState(false);
+  const [job, setJob] = useState(null);
 
+  //  job details for company ID to show application according company 
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const res = await tableDB.getRow({
+          databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
+          tableId: import.meta.env.VITE_APPWRITE_JOBS_TABLE_NAME,
+          rowId: jobId,
+        });
+        setJob(res);
+      } catch (err) {
+        console.error("❌ Error fetching job:", err);
+      }
+    };
+    fetchJob();
+  }, [jobId]);
+
+//  Apply job FUnction
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!resumeLink || !intro) return alert("Please fill all fields");
+
+    if (!resumeLink || !intro) {
+      toast("⚠️ Please fill all fields");
+      return;
+    }
+
+    if (!user) {
+      toast("❌ You must be logged in.");
+      return;
+    }
+
+    if (!job) {
+      toast("⚠️ Job details not loaded yet.");
+      return;
+    }
 
     setLoading(true);
+
     try {
       await tableDB.createRow({
         databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
         tableId: import.meta.env.VITE_APPWRITE_APPLICATIONS_TABLE_NAME,
-        rowId: import.meta.ID.unique(),
+        rowId: ID.unique(),
         data: {
           jobId,
           seekerId: user.$id,
           resumeLink,
           intro,
           status: "pending",
+          companyId: job.companyId,
+          companyName: job.companyName,
+          jobTitle: job.title,
         },
       });
-      alert("✅ Application submitted!");
-      navigate("/jobs");
+
+      toast("🎉 Application submitted successfully!");
+      navigate("/profile");
     } catch (err) {
       console.error("❌ Application error:", err);
-      alert("Failed to submit application.");
+      toast("Failed to submit application.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0B0F19] px-4 py-10">
+    <div className="min-h-screen flex items-center justify-center bg-[#0B0F19] px-4 py-8">
       <motion.form
         onSubmit={handleSubmit}
         initial={{ opacity: 0, y: 20 }}
@@ -51,7 +91,9 @@ function ApplyJob() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md bg-[#1A1F2E] p-8 rounded-2xl shadow-lg border border-gray-800 flex flex-col gap-6"
       >
-        <h2 className="text-2xl font-bold text-center text-white">🚀 Apply for Job</h2>
+        <h2 className="text-2xl font-bold text-center text-white">
+          🚀 Apply for {job?.title || "Job"}
+        </h2>
 
         <label className="flex flex-col gap-1 text-gray-300">
           Resume Link

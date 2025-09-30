@@ -60,17 +60,46 @@ function App() {
       <Toaster position="top-right" richColors />
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
-        <Route path="/signup" element={<PublicLayout><Signup /></PublicLayout>} />
-        <Route path="/login" element={<PublicLayout><Login /></PublicLayout>} />
-        <Route path="/jobs" element={<PublicLayout><JobsSection /></PublicLayout>} />
-
+        <Route
+          path="/"
+          element={
+            <PublicLayout>
+              <Home />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicLayout>
+              <Signup />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <PublicLayout>
+              <Login />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/jobs"
+          element={
+            <PublicLayout>
+              <JobsSection />
+            </PublicLayout>
+          }
+        />
         {/* Protected Routes */}
         <Route
           path="/onboarding"
           element={
             <PrivateRoute>
-              <DashboardLayout><Onboarding /></DashboardLayout>
+              <DashboardLayout>
+                <Onboarding />
+              </DashboardLayout>
             </PrivateRoute>
           }
         />
@@ -79,7 +108,9 @@ function App() {
           element={
             <PrivateRoute>
               <OnboardingGuard>
-                <DashboardLayout><Profile /></DashboardLayout>
+                <DashboardLayout>
+                  <Profile />
+                </DashboardLayout>
               </OnboardingGuard>
             </PrivateRoute>
           }
@@ -89,7 +120,9 @@ function App() {
           element={
             <PrivateRoute>
               <OnboardingGuard>
-                <DashboardLayout><CompanyDashboard /></DashboardLayout>
+                <DashboardLayout>
+                  <CompanyDashboard />
+                </DashboardLayout>
               </OnboardingGuard>
             </PrivateRoute>
           }
@@ -99,22 +132,26 @@ function App() {
           element={
             <PrivateRoute>
               <OnboardingGuard>
-                <DashboardLayout><CreateJob /></DashboardLayout>
+                <DashboardLayout>
+                  <CreateJob />
+                </DashboardLayout>
               </OnboardingGuard>
             </PrivateRoute>
           }
         />
+        
         <Route
           path="/apply-job/:jobId"
           element={
             <PrivateRoute>
               <OnboardingGuard>
-                <DashboardLayout><ApplyJob /></DashboardLayout>
+                <DashboardLayout>
+                  <ApplyJob />
+                </DashboardLayout>
               </OnboardingGuard>
             </PrivateRoute>
           }
         />
-
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -10,59 +10,86 @@ import Loader from "../components/ui/Loader";
 function Profile() {
   const { user } = useAuth();
   const [profile, setProfile] = useState(null);
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("applied");
 
-  // Dummy jobs (future me DB se aayenge)
-  const jobs = {
-    applied: [
-      { id: 1, title: "Frontend Developer", company: "TechCorp", status: "Under Review" },
-      { id: 2, title: "UI/UX Designer", company: "Creative Studio", status: "Interview Scheduled" },
-    ],
-    saved: [
-      { id: 3, title: "Backend Engineer", company: "Cloudify" },
-      { id: 4, title: "Product Manager", company: "InnovateX" },
-    ],
-    bookmarks: [{ id: 5, title: "Data Scientist", company: "AI Labs" }],
-  };
-
+  // Fetch profile
   useEffect(() => {
+    if (!user) return;
     (async () => {
       try {
-        setLoading(true); // Loader on
+        setLoading(true);
         const res = await tableDB.listRows({
           databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
           tableId: import.meta.env.VITE_APPWRITE_PROFILE_TABLE_NAME,
           queries: [Query.equal("userId", user.$id)],
         });
 
-        if (res && res.rows.length > 0) {
+        if (res?.rows?.length > 0) {
           setProfile(res.rows[0]);
         }
       } catch (err) {
         console.error("Profile fetch error:", err);
       } finally {
-        setLoading(false); // Loader off
+        setLoading(false);
       }
     })();
-  }, [user.$id]);
+  }, [user]);
 
-  const renderJobs = () => {
-    return jobs[activeTab].map((job) => (
+  // Fetch seeker applications
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      try {
+        const res = await tableDB.listRows({
+          databaseId: import.meta.env.VITE_APPWRITE_DATABASE_ID,
+          tableId: import.meta.env.VITE_APPWRITE_APPLICATIONS_TABLE_NAME,
+          queries: [Query.equal("seekerId", user.$id)],
+        });
+        setApplications(res.rows || []);
+      } catch (err) {
+        console.error("Applications fetch error:", err);
+      }
+    })();
+  }, [user]);
+
+  const renderAppliedJobs = () => {
+    if (applications.length === 0) {
+      return (
+        <p className="text-gray-400 text-center py-6 bg-[#181C29] rounded-xl border border-gray-700">
+          ❌ No jobs applied yet
+        </p>
+      );
+    }
+
+    return applications.map((app, index) => (
       <motion.div
-        key={job.id}
-        className="p-4 bg-[#1A1F2E] rounded-xl border border-gray-800 shadow-md flex justify-between items-center"
+        key={app.$id}
+        initial={{ opacity: 0, x: index % 2 === 0 ? -20 : 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4, delay: index * 0.05 }}
+        className="p-4 bg-[#1A1F2E] rounded-xl border border-gray-800 shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
       >
         <div>
-          <h3 className="text-lg font-semibold">{job.title}</h3>
-          <p className="text-gray-400 text-sm">{job.company}</p>
+          <h3 className="text-lg font-semibold">{app.jobTitle || "Applied Job"}</h3>
+          <p className="text-gray-400 text-sm">{app.companyName || "Unknown Company"}</p>
+          {app.resumeLink && (
+            <a
+              href={app.resumeLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-indigo-400 underline text-sm mt-1 block"
+            >
+              View Resume
+            </a>
+          )}
         </div>
-        {job.status && <Tag label={job.status} />}
+        {app.status && <Tag label={app.status} />}
       </motion.div>
     ));
   };
 
-  // 🔹 Loader use karo yahan
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -72,13 +99,17 @@ function Profile() {
   }
 
   if (!profile) {
-    return <div className="flex h-screen items-center justify-center text-white">Profile not found ❌</div>;
+    return (
+      <div className="flex h-screen items-center justify-center text-white">
+        Profile not found ❌
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-[#0B0F19] text-white px-4 md:px-8 py-10">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Panel */}
+        {/* Left Panel (unchanged) */}
         <motion.div
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -138,46 +169,60 @@ function Profile() {
           </div>
         </motion.div>
 
-        {/* Right Panel */}
+        {/* Right Panel*/}
         <motion.div
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="lg:col-span-2 bg-[#1A1F2E] rounded-2xl p-6 shadow-lg border border-gray-800"
+          className="lg:col-span-2 bg-[#1A1F2E] rounded-2xl p-6 shadow-lg border border-gray-800 flex flex-col"
         >
-          <div className="flex flex-wrap gap-4 border-b border-gray-700 pb-2 mb-4">
+          {/* Tabs */}
+          <div className="flex flex-wrap gap-6 border-b border-gray-700 pb-3 mb-6">
             <button
               onClick={() => setActiveTab("applied")}
-              className={
+              className={`flex items-center gap-2 pb-2 transition ${
                 activeTab === "applied"
-                  ? "text-indigo-400 border-b-2 border-indigo-400 pb-2"
-                  : "text-gray-400"
-              }
+                  ? "text-indigo-400 border-b-2 border-indigo-400"
+                  : "text-gray-400 hover:text-gray-200"
+              }`}
             >
               <Briefcase size={18} /> Applied
             </button>
             <button
               onClick={() => setActiveTab("saved")}
-              className={
+              className={`flex items-center gap-2 pb-2 transition ${
                 activeTab === "saved"
-                  ? "text-indigo-400 border-b-2 border-indigo-400 pb-2"
-                  : "text-gray-400"
-              }
+                  ? "text-indigo-400 border-b-2 border-indigo-400"
+                  : "text-gray-400 hover:text-gray-200"
+              }`}
             >
               <Save size={18} /> Saved
             </button>
             <button
               onClick={() => setActiveTab("bookmarks")}
-              className={
+              className={`flex items-center gap-2 pb-2 transition ${
                 activeTab === "bookmarks"
-                  ? "text-indigo-400 border-b-2 border-indigo-400 pb-2"
-                  : "text-gray-400"
-              }
+                  ? "text-indigo-400 border-b-2 border-indigo-400"
+                  : "text-gray-400 hover:text-gray-200"
+              }`}
             >
               <Bookmark size={18} /> Bookmarks
             </button>
           </div>
 
-          <div className="flex flex-col gap-4">{renderJobs()}</div>
+          {/* Tab Content */}
+          <div className="flex flex-col gap-4">
+            {activeTab === "applied" && renderAppliedJobs()}
+            {activeTab === "saved" && (
+              <p className="text-gray-400 text-center py-6 bg-[#181C29] rounded-xl border border-gray-700">
+                💾 Saved jobs coming soon
+              </p>
+            )}
+            {activeTab === "bookmarks" && (
+              <p className="text-gray-400 text-center py-6 bg-[#181C29] rounded-xl border border-gray-700">
+                🔖 Bookmarked jobs coming soon
+              </p>
+            )}
+          </div>
         </motion.div>
       </div>
     </div>

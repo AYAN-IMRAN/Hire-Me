@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 
 function Tag({ label, color = "indigo" }) {
-  // Color classes dynamic bana diye taake baad me green/red etc. bhi use ho sake
+
   const baseClasses = {
     indigo: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
     green: "bg-green-500/20 text-green-300 border-green-500/30",

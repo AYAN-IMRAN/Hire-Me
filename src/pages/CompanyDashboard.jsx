@@ -5,6 +5,7 @@ import { Briefcase, CheckCircle, XCircle, Plus } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { tableDB } from "../services/appwrite";
 import { Query } from "appwrite";
+import Loader from "../components/ui/Loader";
 
 function CompanyDashboard() {
   const { user } = useAuth();
@@ -70,7 +71,7 @@ function CompanyDashboard() {
   if (!company || loading) {
     return (
       <div className="flex h-screen items-center justify-center text-white">
-        Loading company profile...
+        <Loader />
       </div>
     );
   }

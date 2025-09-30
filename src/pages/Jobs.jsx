@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Search } from "lucide-react";
 import { tableDB } from "../services/appwrite";
 import { Query } from "appwrite"; 
+import Loader from "../components/ui/Loader";
 
 function JobsSection() {
   const [search, setSearch] = useState("");
@@ -96,9 +97,7 @@ function JobsSection() {
               <JobCard key={job.$id || job.id} job={job} />
             ))
           ) : (
-            <p className="text-gray-400 col-span-full text-center">
-              loading .....
-            </p>
+            <Loader />
           )}
         </motion.div>
       </div>

@@ -10,17 +10,20 @@ function JobCard({ job, index }) {
   const navigate = useNavigate();
 
   const handleApply = () => {
-    if (!user) {
-     
-      navigate("/signup");
-    } else if (user.prefs?.role === "seeker") {
-     
-      navigate(`/apply-job/${job.$id}`);
-    } else {
-    
-      console.log("Only seekers can apply to jobs");
+  if (!user) {
+    navigate("/signup");
+  } else if (user.prefs?.role === "seeker") {
+    const jobId = job?.$id || job?.id || job?._id;
+    if (!jobId) {
+      console.error("❌ No jobId found in job object:", job);
+      return toast.error("Job ID not found, cannot apply.");
     }
-  };
+    navigate(`/apply-job/${jobId}`);
+  } else {
+    console.log("Only seekers can apply to jobs");
+  }
+};
+
 
  
   const direction = index % 2 === 0 ? -40 : 40;
