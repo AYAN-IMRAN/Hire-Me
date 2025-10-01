@@ -72,7 +72,7 @@ npm run build
 
 ## 👨‍💻 Contributors
 
-* [**Ayan Ahmed**](https://github.com/AYAN-IMRAN) 
+* [**Ayan Imran**](https://github.com/AYAN-IMRAN) 
 * [**Nitoo Kumari**](https://github.com/nitoo124)
 
 ---
@@ -80,5 +80,5 @@ npm run build
 
 ## ❤️ Built With
 
-Made with 💙 by [**Ayan Ahmed**](https://github.com/AYAN-IMRAN) and [**Nitoo Kumari**](https://github.com/nitoo124).
+Made with 💙 by [**Ayan Imran**](https://github.com/AYAN-IMRAN) and [**Nitoo Kumari**](https://github.com/nitoo124).
 
