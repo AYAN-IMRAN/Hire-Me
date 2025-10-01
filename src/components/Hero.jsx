@@ -62,7 +62,7 @@ function Hero() {
             <motion.a
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              href="/auth"
+              href="/signup"
               className="px-6 py-3 rounded-lg border border-indigo-400 text-indigo-400 hover:bg-indigo-500 hover:text-white transition"
             >
               Get Started
