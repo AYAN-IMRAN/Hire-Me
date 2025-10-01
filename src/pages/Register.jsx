@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
-function Signup() {
+function Register() {
   const { signup } = useAuth();
   const navigate = useNavigate();
 
@@ -83,4 +83,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default Register;

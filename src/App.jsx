@@ -12,7 +12,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
-import Signup from "./pages/SignUp";
+
 import Login from "./pages/Login";
 import Onboarding from "./pages/Onboarding";
 import Profile from "./pages/Profile";
@@ -22,6 +22,7 @@ import CreateJob from "./pages/CreateJob";
 import ApplyJob from "./pages/ApplyJob";
 
 import { useAuth } from "./context/AuthContext";
+import Register from "./pages/Register";
 
 // ===== Guards =====
 const PrivateRoute = ({ children }) => {
@@ -72,10 +73,11 @@ function App() {
           path="/signup"
           element={
             <PublicLayout>
-              <Signup />
+              <Register />
             </PublicLayout>
           }
         />
+
         <Route
           path="/login"
           element={
@@ -139,7 +141,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        
+
         <Route
           path="/apply-job/:jobId"
           element={
