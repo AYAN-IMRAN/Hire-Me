@@ -69,12 +69,6 @@ function Navbar() {
           <a href="/jobs" className="text-gray-300 hover:text-indigo-400 transition-colors">
             Jobs
           </a>
-          <a href="/companies" className="text-gray-300 hover:text-indigo-400 transition-colors">
-            Companies
-          </a>
-          <a href="/about" className="text-gray-300 hover:text-indigo-400 transition-colors">
-            About
-          </a>
 
           {/* Conditional CTA */}
           {renderCTA()}

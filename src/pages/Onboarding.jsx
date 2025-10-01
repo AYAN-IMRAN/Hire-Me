@@ -56,11 +56,6 @@ await tableDB.createRow({
     industry: role === "company" ? industry : null,
     description: role === "company" ? description : null,
   },
-  permissions: [
-    Permission.read(Role.user(user.$id)),
-    Permission.update(Role.user(user.$id)),
-    Permission.delete(Role.user(user.$id)),
-  ],
 });
 
 

@@ -83,23 +83,41 @@ function CompanyDashboard() {
         <motion.div
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="bg-[#1A1F2E] rounded-2xl p-6 shadow-lg border border-gray-800 flex flex-col items-center"
+          className="bg-[#1A1F2E] rounded-2xl p-6 shadow-lg border border-gray-800 flex flex-col items-center text-center"
         >
-          <div className="w-24 h-24 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 flex items-center justify-center text-2xl font-bold">
+          {/* Company Avatar */}
+          <div className="w-28 h-28 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 flex items-center justify-center text-3xl font-bold shadow-md">
             {company.companyName?.charAt(0).toUpperCase() || "C"}
           </div>
-          <h2 className="mt-3 text-xl font-bold text-center">{company.companyName}</h2>
-          <p className="text-gray-400 text-sm text-center">{user?.email}</p>
 
-          <div className="mt-6 space-y-4 w-full">
-            <p className="text-gray-400 text-sm">Role</p>
-            <p className="font-medium">{company.role}</p>
+          {/* Company Name & Email */}
+          <h2 className="mt-4 text-2xl font-bold">{company.companyName}</h2>
+          <p className="text-gray-400 text-sm">{user?.email}</p>
+          <span className="mt-2 inline-block px-3 py-1 text-xs font-medium bg-[#2A2F3E] text-violet-300 rounded-full">
+            Company Dashboard
+          </span>
 
-            <p className="text-gray-400 text-sm">Industry</p>
-            <p className="font-medium">{company.industry}</p>
+          {/* Divider */}
+          <div className="w-full h-px bg-gray-800 my-6"></div>
 
-            <p className="text-gray-400 text-sm">About</p>
-            <p className="font-medium">{company.description}</p>
+          {/* Company Details */}
+          <div className="w-full space-y-4 text-left">
+            <div>
+              <p className="text-gray-400 text-xs uppercase">Role</p>
+              <p className="text-sm font-medium">{company.role || "Company"}</p>
+            </div>
+            <div>
+              <p className="text-gray-400 text-xs uppercase">Industry</p>
+              <p className="text-sm font-medium">
+                {company.industry || "Not provided"}
+              </p>
+            </div>
+            <div>
+              <p className="text-gray-400 text-xs uppercase">About</p>
+              <p className="text-sm font-medium">
+                {company.description || "No description available"}
+              </p>
+            </div>
           </div>
         </motion.div>
 
@@ -135,7 +153,9 @@ function CompanyDashboard() {
                   className="p-4 bg-[#242B3A] rounded-xl border border-gray-700 shadow-sm flex justify-between flex-col sm:flex-row gap-4"
                 >
                   <div>
-                    <h3 className="text-lg font-semibold">{app.seekerName || "Applicant"}</h3>
+                    <h3 className="text-lg font-semibold">
+                      {app.seekerName || "Applicant"}
+                    </h3>
                     <p className="text-gray-400 text-sm">Intro: {app.intro}</p>
                     {app.resumeLink && (
                       <a
