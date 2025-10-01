@@ -34,7 +34,7 @@ This platform allows job seekers and companies to connect seamlessly in a fast, 
 
 ### 1. Clone the repository  
 ```bash
-git clone https://github.com/your-username/hireme.git
+git clone https://github.com/AYAN-IMRAN/Hire-Me
 cd hireme
 ````
 
